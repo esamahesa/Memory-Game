@@ -20,7 +20,7 @@ const winNotif = ()=>{
 const reset = ()=>{
     gameActive = false;
     isGameOver = false;
-    second = 20;
+    second = 30;
     collectMatch.length = 0; // dont create a new array for this, but clear the existing array instead
     collectColor = [];
     collectElem = [];
