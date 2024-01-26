@@ -1,165 +1,281 @@
-const start = document.querySelector('.start-button');
-const memoryInners = document.querySelectorAll('.memory-inners');
-const memoryBacks = document.querySelectorAll('.memory-backs');
-const picture = document.getElementById("picture");
-let score = 0; // Kalau menang score++
+// Make the element function
+function printElement(amountOfElement){
+    const container = document.querySelector('.container');
+
+    let i = 0;
+    let makeMemoryInnersInterval = setInterval(() => {
+        if(i >= amountOfElement - 1) clearInterval(makeMemoryInnersInterval);
+        i++;
+
+        // Create element
+        const memoryInner = document.createElement('div');
+        const memoryFront = document.createElement('div');
+        const memoryBack = document.createElement('div');
+
+        // Append class
+        memoryInner.classList.add('memory-inners');
+        memoryFront.classList.add('memory-fronts');
+        memoryBack.classList.add('memory-backs');
+
+        // Append child
+        container.appendChild(memoryInner);
+        memoryInner.appendChild(memoryFront);
+        memoryInner.appendChild(memoryBack);
+    }, 100);
+};
+
+// Others
+let isGamePlaying = false;
 let isGameOver = false;
-let second = 30;
-let collectColor = [];
-let collectElem = [];
-let collectMatch = []; // Ini untuk menentukan jumlah matchnya
-let collectColorMatch = [];
-let sumDisplayNone = 0;
-let highScore = 0;
-let gameActive = false; // Ini menunjukan kalau game sedang berjalan atau ngga untuk bisa menonaktifkan function checkVal
 
-start.addEventListener('click',()=>{
-    time.innerHTML = `00:00`;
-    gameActive = true;
-    for(let i = 0; i<memoryInners.length; i++){
-        memoryInners[i].style.transform = 'rotateY(180deg)';
+// When user click start button, so all the card open, then after 3s the card close again
+const openingRotatingCard = (memoryInners)=>{
+    memoryInners.forEach(memoryInner => {
+        memoryInner.style.transform = 'rotateY(180deg)';
+    });
+
+    setTimeout(()=>{
+        memoryInners.forEach(memoryInner => {
+            memoryInner.style.transform = 'rotateY(0deg)';
+        });
+    }, 3000);
+};
+
+// make a function that will track the color type
+const trackingColorType = (arrayMatchColor)=>{
+    let everyColorTypeArray = [];
+
+    for(let color of arrayMatchColor){
+        if(color.indexOf('conic-gradient') !== -1){
+            everyColorTypeArray.push('Conic Gradient');
+        } else if(color.indexOf('radial-gradient') !== -1){
+            everyColorTypeArray.push('Radial Gradient');
+        } else if(color.indexOf('linear-gradient') !== -1){
+            everyColorTypeArray.push('Linear Gradient');
+        } else{
+            everyColorTypeArray.push('RGB Color');
+        };
     };
-    generateColor(color);
-        setTimeout(()=>{
-            close();
-            generateSection(color);
-            checkVal(collectMatch);
-        },3000);
-        setTimeout(()=>{countDown(second,collectMatch);},3000);
-        // setTimeout(()=>{start.style.display = `none`},3000);
-        start.disabled = true;
-});
 
-// Kita tutup kartu nya setelah menunjukan warnanya
-const close = ()=>{
-    memoryInners.forEach(memoryInner=>{
-        memoryInner.style.transform = 'rotateY(0deg)';
-        scale(memoryInner);
+    return everyColorTypeArray;
+};
+
+// make a function to open then checking the color
+const openToCheckTheColor = (memoryInner, memoryBack, arrCollectCard, arrCollectColor)=>{
+    let getColor = window.getComputedStyle(memoryBack, null).getPropertyValue('background');
+    memoryInner.style.transform = 'rotateY(180deg)';
+    arrCollectCard.push(memoryInner);
+    arrCollectColor.push(getColor);
+};
+
+// make a function that will surpass some condition
+const conditionLogic = (memoryInner, arrCollectMemory)=>{
+    if(
+        memoryInner.style.transform !== 'rotateY(180deg)' &&
+        !memoryInner.classList.contains('match') &&
+        arrCollectMemory.length < 2 && !isGameOver &&
+        isGamePlaying){
+        return false;
+    };
+    return true;
+};
+
+// make a function that will handle the event
+const handle = (memoryInner, memoryBack, arrColectMemory, arrCollectColor, arrCollectMatchElement, arrCollectMatchColor)=>{
+    // Open Card
+    openToCheckTheColor(memoryInner, memoryBack, arrColectMemory, arrCollectColor);
+    if(arrCollectColor.length < 2) return;
+    if(arrCollectColor[0] === arrCollectColor[1]){
+        arrCollectMatchElement.push(arrColectMemory[0]);
+        arrCollectMatchElement.push(arrColectMemory[1]);
+
+        // push the matching color!
+        arrCollectMatchColor.push(arrCollectColor[0]);
+
+        // add class match
+        arrColectMemory[0].classList.add('match');
+        arrColectMemory[1].classList.add('match');
+
+        // delete value
+        arrColectMemory.length = 0;
+        arrCollectColor.length = 0;
+    } else{
+        // close again
+        setTimeout(()=>{
+            arrColectMemory[0].style.transform = 'rotateY(0deg)';
+            arrColectMemory[1].style.transform = 'rotateY(0deg)';
+            arrColectMemory.length = 0;
+            arrCollectColor.length = 0;
+        }, 1000);
+    };
+};
+
+// lets make a function that will count the time down
+const countDownTime = (arrMatchMemory, times, timeElement, memoryInners, arrayMatchColor)=>{
+    timeElement.innerHTML = `00:${times}`;
+    let timeInterval = setInterval(()=>{
+        if(arrMatchMemory.length === memoryInners.length && !isGameOver){
+            clearInterval(timeInterval);
+            isGameOver = true;
+            winNotif();
+
+            // tracking the color match
+            let scoreDisplayElement = document.querySelector('.score-display span');
+            scoreDisplayElement.innerHTML = "Score: " + scoreCounting(scoreObjectValue, trackingColorType(arrayMatchColor));
+        } else if(times <= 0 && !isGameOver){
+            clearInterval(timeInterval);
+            isGameOver = true;
+            loseNotif();
+        } else{
+            times--;
+            timeElement.innerHTML = `00:${times}`;
+            if(times < 10){
+                timeElement.innerHTML = `00:0${times}`;
+            };
+        };
+    }, 1000);
+};
+
+// lets go applying the game logic
+const gameLogic = (arrCollectElement, arrCollectColor, arrCollectElementMatch, arrCollectColorMatch, times, timeElement, memoryInners, memoryBacks)=>{
+    // Make an array that collect the handleCard function, so we can remove all the event!!
+    let handleCards = [];
+    memoryInners.forEach((memoryInner, index)=>{
+        let handleCard = ()=>{
+            // Check if some condition true or not
+            if(conditionLogic(memoryInner, arrCollectElement)) return;
+            handle(memoryInner, memoryBacks[index], arrCollectElement, arrCollectColor, arrCollectElementMatch, arrCollectColorMatch);
+        };
+
+        // Push the function
+        handleCards.push(handleCard);
+
+        // Add event
+        memoryInner.addEventListener('click', handleCard);
+    });
+
+    setTimeout(()=>{
+        countDownTime(arrCollectElementMatch, times, timeElement, memoryInners, arrCollectColorMatch);
+
+        // Make the interval so we can remove the event when the game over!
+        let removeEventInterval = setInterval(()=>{
+            if(isGameOver){
+                clearInterval(removeEventInterval);
+
+                // removing the event for each card
+                memoryInners.forEach((memoryInner, index)=>{
+                    memoryInner.removeEventListener('click', handleCards[index]);
+                });
+            };
+        }, times + 1);
+    }, 3000);
+};
+
+// set the difficulty
+const getDifficulty = (difficultySelectElement)=>{
+    let difficulty = "Easy"; // Easy is a default
+    for(let i = 0; i < difficultySelectElement.length; i++){
+        if(difficultySelectElement[i].dataset.choosen === "true"){
+            difficulty = difficultySelectElement[i].dataset.value;
+        };
+    };
+
+    // Game difficulty Object
+    const gameDifficultySettings = {
+        // Index 0 is the total Element, 1 is the display time
+        "Very Easy": {
+            "Total Element": 12,
+            "Display Time": 10
+        },
+        "Easy": {
+            "Total Element": 16,
+            "Display Time": 25
+        },
+        "Medium": {
+            "Total Element": 20,
+            "Display Time": 40
+        },
+        "Hard": {
+            "Total Element": 24,
+            "Display Time": 50
+        },
+        "Fucking Hard": {
+            "Total Element": 28,
+            "Display Time": 59
+        }
+    };
+
+    return [difficulty, gameDifficultySettings[difficulty]];
+};
+
+// get the mode function
+const getMode = (modeSelectElement)=>{
+    for(let i = 0; i < modeSelectElement.length; i++){
+        if(modeSelectElement[i].dataset.choosen === "true"){
+            return modeSelectElement[i].dataset.value;
+        };
+    };
+};
+
+// make a promise pending
+function pending(ms){
+    return new Promise(resolve=>{
+        setTimeout(resolve, ms);
     });
 };
 
-// Kita buat function untuk ngebuka card nya lagi
+// lets go applying all the function to one function start
+async function startGame(){
+    // get the difficulty select element
+    let difficultySelectElement = document.querySelectorAll('.difficulty-option');
 
-const open = (i)=>{
-    memoryInners[i].style.transform = 'rotateY(180deg)';
-    removeScale(i);
-};
+    // make the data-disabled true and the button disabled
+    document.querySelector('.difficulty-section').dataset.disabled = "true";
+    playButton.disabled = true;
 
-// Kita buat function untuk mengecek value dari 2 card yang di buka
+    // Set difficulty
+    let difficultyArray = getDifficulty(difficultySelectElement)[1];
+    let difficulty = difficultyArray["Total Element"];
+    let times = difficultyArray["Display Time"];
 
-const checkVal = (collectMatch)=>{
-    let bgColor;
-    for(let i = 0; i<memoryInners.length; i++){
-        const handleClick = ()=>{
-            /* Kita akan memasukan 4 kondisi sekaligus, pertama kalau dia tidak match
-            Kedua kalau dia sudah memiliki element yang ada pada array memoryInners[i] dengan menggunakan includes
-            Ketiga yaitu mengecek apakah dia sedang dalam posisi terbuka atau bukan
-            Keempat kita harus ngecek game nya udah selesai atau belum
-            */
-            if(gameActive && !isGameOver && collectElem.length !== 2 && !memoryInners[i].classList.contains('match') && !collectElem.includes(memoryInners[i]) && memoryInners[i].style.transform !== 'rotateY(180deg)'){
-                open(i);
-                bgColor = window.getComputedStyle(memoryBacks[i]).backgroundColor;
+    // Array Color
+    let color = [];
 
-                collectElem.push(memoryInners[i]);
-                collectColor.push(bgColor);
-                if(collectElem.length >= 2){
-                    if(collectColor[0] === collectColor[1]){
-                        match(collectElem);
-                        collectMatch.push(...collectElem);
-                        collectColorMatch.push(collectColor[0]);
-                        checkColor(collectColorMatch);
-                        collectElem = [];
-                        collectColor = [];
-                        return collectColorMatch;
-                    } else{
-                        setTimeout(()=>{
-                            closeAgain(collectElem);
-                            collectElem = [];
-                            collectColor = [];
-                        },1000);
-                    };
-                };
-            };
-        };
-        memoryInners[i].addEventListener('click',handleClick);
-    };
-};
+    printElement(difficulty);
+    await pending(difficulty * 100 + 1000);
+    // Get the element
+    const memoryInners = document.querySelectorAll('.memory-inners');
+    const memoryBacks = document.querySelectorAll('.memory-backs');
+    const timeElement = document.querySelector('.time');
 
-// Buat function untuk nambahin class kalau misalkan dia Match
-const match = (arrayOfelem)=>{
-    for(let i = 0; i<arrayOfelem.length; i++){
-        arrayOfelem[i].classList.add('match');
-    };
-};
+    timeElement.innerHTML = '00:00';
 
-// Setelah di tutup kita buat function untuk scale dia
-const scale = (elem)=>{elem.classList.add('scale');};
-
-// Setelah terbuka kita remove scale nya
-const removeScale = (i)=>{
-    memoryInners[i].classList.remove('scale');
-};
-
-// Kalau kondisi nya false, tutup lagi
-const closeAgain = (arrayOfelem)=>{
-    for(let i = 0; i<arrayOfelem.length; i++){
-        arrayOfelem[i].style.transform = 'rotateY(0deg)';
-        scale(arrayOfelem[i]);
-    };
-};
-
-//  Kita bikin waktu hitung mundurnya
-const time = document.querySelector('.time');
-const countDown = (second,arrayMatch)=>{
-    time.innerHTML = `00:${second}`;
-    let count = setInterval(()=>{
-        if(arrayMatch.length === 16 && !isGameOver){
-            win(20-second);
-            clearInterval(count);
-        } else if(second === 0 && !isGameOver){
-            lose();
-            clearInterval(count);
-        } else{
-            second--;
-            time.innerHTML = `00:${second}`;
-            if(second<10){time.innerHTML = `00:0${second}`};
-        };
-    },1000);
-};
-
-// Function ketika Win
-const win = (time)=>{
-    winNotif();
-    score++;
-    if(time > highScore){
-        highScore = time;
-    }
-    console.clear();
-    console.log(`Your Score: ${score}
-    Your HighScore: ${highScore}`);
-    isGameOver = true;
-};
-
-// Function ketika lose
-const lose = ()=>{
-    loseNotif();
-    score--;
-    if(score < 0){
-        score = 0;
-    } else{
-        console.clear();
-        console.log(`Your Score: ${score}`);
+    let cardInformation = {
+        "Collect": {
+            "Element": [],
+            "Color": []
+        },
+        "Collect Match": {
+            "Element": [],
+            "Color": []
+        }
     };
 
-    isGameOver = true;
+    // Open card then after 3s close card again
+    openingRotatingCard(memoryInners);
+    // Generating color for card
+    console.log(generateColor(color, memoryBacks, difficulty / 2, getMode(document.querySelectorAll('.mode-option')), colorObjectSettings));
+    // Play the game logic
+    gameLogic(cardInformation.Collect.Element, 
+        cardInformation.Collect.Color, 
+        cardInformation["Collect Match"].Element, 
+        cardInformation["Collect Match"].Color, 
+        times, timeElement, memoryInners, memoryBacks);
 
-    for(let i = 0; i<memoryInners.length; i++){
-        memoryInners[i].classList.remove('scale');
-    };
-
-    const colorLeft = document.querySelectorAll('.color-left');
-    for(let i = 0; i<colorLeft.length; i++){
-        colorLeft[i].remove();
-    };
-    sumDisplayNone = 0;
+    isGamePlaying = true;
+    console.log(cardInformation);
 };
+
+// lets go add the event listener
+const playButton = document.querySelector('.play-button');
+playButton.addEventListener('click', startGame);
