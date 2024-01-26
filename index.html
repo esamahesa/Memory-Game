@@ -6,99 +6,59 @@
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/card.css">
     <link rel="stylesheet" href="./css/notification.css">
+    <link rel="stylesheet" href="./css/drop-down.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap" rel="stylesheet">
     <link rel="shortcut icon" href="./media/brain_fav_icon.png" type="image/x-icon">
+
+    <script async src="https://basicons.xyz/embed.js"></script>
     <title>Memory Game</title>
 </head>
 <body>
     <div class="title">
-        <img src="/media/brain_logo.png" alt="brain_logo" id="picture">
-        <span>Memory Game</span>
-        <div class="count-down-time">
+        <div class="subtitle"><h1 title="Memory Game">Memory Game</h1><i class="bsc-archive score-icon pointer" title="Check Score"></i></div>
+        <div class="count-down-time" title="Time">
             <span class="time">00:00</span>
         </div>
-    </div>
-    <div class="left-section">
-        <button class="start-button button-55" role="button">Start</button>
+
+        <div class="difficulty-section" data-disabled="false">
+            <div id="difficulty" title="Select Difficulty And Mode">
+                Select Difficulty And Mode
+                <div class="difficulty-and-mode-wrapper">
+                    <div class="difficulty-wrapper">
+                        <div class="difficulty-option" data-value="Very Easy" data-choosen="false">Very Easy</div>
+                        <div class="difficulty-option" data-value="Easy" data-choosen="false">Easy</div>
+                        <div class="difficulty-option" data-value="Medium" data-choosen="false">Medium</div>
+                        <div class="difficulty-option" data-value="Hard" data-choosen="false">Hard</div>
+                        <div class="difficulty-option" data-value="Fucking Hard" data-choosen="false">Fucking Hard!</div>
+                    </div>
+                    <div class="mode-wrapper">
+                        <div class="mode-option" data-value="Normal Color" data-choosen="false">Normal Color</div>
+                        <div class="mode-option" data-value="Linear Gradient" data-choosen="false">Linear Gradient</div>
+                        <div class="mode-option" data-value="Radial Gradient" data-choosen="false">Radial Gradient</div>
+                        <div class="mode-option" data-value="Conic Gradient" data-choosen="false">Conic Gradient</div>
+                        <div class="mode-option" data-value="Mix" data-choosen="false">Mix!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="button-section"><button class="play-button" type="button" title="Play Game">Play</button></div>
     </div>
 
-    <div class="container">
-        <div class="memory-inners">
-            <div class="memory-fronts"></div>
-            <div class="memory-backs"></div>
-        </div>
-        <div class="memory-inners">
-            <div class="memory-fronts"></div>
-            <div class="memory-backs"></div>
-        </div>
-        <div class="memory-inners">
-            <div class="memory-fronts"></div>
-            <div class="memory-backs"></div>
-        </div>
-        <div class="memory-inners">
-            <div class="memory-fronts"></div>
-            <div class="memory-backs"></div>
-        </div>
-        <div class="memory-inners">
-            <div class="memory-fronts"></div>
-            <div class="memory-backs"></div>
-        </div>
-        <div class="memory-inners">
-            <div class="memory-fronts"></div>
-            <div class="memory-backs"></div>
-        </div>
-        <div class="memory-inners">
-            <div class="memory-fronts"></div>
-            <div class="memory-backs"></div>
-        </div>
-        <div class="memory-inners">
-            <div class="memory-fronts"></div>
-            <div class="memory-backs"></div>
-        </div>
-        <div class="memory-inners">
-            <div class="memory-fronts"></div>
-            <div class="memory-backs"></div>
-        </div>
-        <div class="memory-inners">
-            <div class="memory-fronts"></div>
-            <div class="memory-backs"></div>
-        </div>
-        <div class="memory-inners">
-            <div class="memory-fronts"></div>
-            <div class="memory-backs"></div>
-        </div>
-        <div class="memory-inners">
-            <div class="memory-fronts"></div>
-            <div class="memory-backs"></div>
-        </div>
-        <div class="memory-inners">
-            <div class="memory-fronts"></div>
-            <div class="memory-backs"></div>
-        </div>
-        <div class="memory-inners">
-            <div class="memory-fronts"></div>
-            <div class="memory-backs"></div>
-        </div>
-        <div class="memory-inners">
-            <div class="memory-fronts"></div>
-            <div class="memory-backs"></div>
-        </div>
-        <div class="memory-inners">
-            <div class="memory-fronts"></div>
-            <div class="memory-backs"></div>
-        </div>
+    <div class="container"></div>
+
+    <div class="notification" style="display: none;"> <!-- style="display: none;" -->
+        <div class="win-or-lose"><span>Win</span></div>
+        <div class="score-display"><span>Score: 0</span></div>
+        <button class="reset-button" role="button" type="reset" title="Play Again">Play Again?</button>
     </div>
 
-    <div class="notification" style="display: none;">
-        <div class="win-or-lose">Win</div>
-        <button class="reset-button button-81" role="button">Play Again?</button>
-    </div>
     <script src="./js/script.js"></script>
     <script src="./js/notification.js"></script>
-    <script src="./js/random_color.js"></script>
-    <script src="./js/cardleft.js"></script>
+    <script src="./js/color-generator.js"></script>
+    <script src="./js/score.js"></script>
 </body>
 </html>
