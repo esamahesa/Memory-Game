@@ -1,125 +1,101 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
-body {
+html{
+    font-size: 10px;
+}
+
+body{
     font-family: 'Courier Prime', monospace;
     background-color: rgb(160,219,240);
 }
 
-.title {
+.title{
     width: 100%;
-    height: 7vh;
-    display: flex;
-    justify-content: center;
+    height: 6.4rem;
+    display: grid;
+    grid-template-columns: 3fr auto 1fr auto;
     align-items: center;
+    gap: 10px;
+    padding: 0 1rem;
     background-color: rgb(18,164,217);
-    box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.9) 0px 0px 0px 1px;
 }
 
-.title span {
-    font-size: 2em;
+.title h1{
+    font-size: 3.2rem;
     font-weight: 600;
 }
 
-.left-section {
-    position: absolute;
-    margin-top: 3vh;
-    width: 8vw;
-    height: 90vh;
-    background-color: rgb(65,182,225);
-    border-radius: 0 1vw 0 0;
-    box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.9) 0px 0px 0px 1px;
-}
-
-.left-section {
-    display: grid;
-    grid-template-rows: auto;
-}
-
 .container {
-    position: absolute;
-    margin: 3vh 0 0 11vw;
-    width: 89vw;
-    height: 90vh;
+    margin: 3vh 0 0 0;
+    width: 100%;
+    height: calc(97vh - 6.4rem); 
+    /* Ini di dapatkan dari pengurangan height yang di miliki oleh title dan di berikan vh yang di kurangi marginnya*/
     background-color: rgb(113,200,232);
-    border-radius: 1vw 0 0 0;
-    box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.9) 0px 0px 0px 1px;
 }
 
 .container {
     display: grid;
-    grid-template-columns: auto auto auto auto;
-}
-
-/* CSS */
-.button-55 {
-  background-color: #fff;
-  background-image: none;
-  background-position: 0 90%;
-  background-repeat: repeat no-repeat;
-  background-size: 4px 3px;
-  border-radius: 15px 225px 255px 15px 15px 255px 225px 15px;
-  border-style: solid;
-  border-width: 2px;
-  box-shadow: rgba(0, 0, 0, .2) 15px 28px 25px -18px;
-  box-sizing: border-box;
-  color: #41403e;
-  cursor: pointer;
-  display: inline-block;
-  font-family: Neucha, sans-serif;
-  font-size: 1rem;
-  line-height: 23px;
-  outline: none;
-  padding: .25rem;
-  margin: 2vh 0 0 0;
-  width: 95%;
-  height: 10vh;
-  text-decoration: none;
-  transition: all 235ms ease-in-out;
-  border-bottom-left-radius: 15px 255px;
-  border-bottom-right-radius: 225px 15px;
-  border-top-left-radius: 255px 15px;
-  border-top-right-radius: 15px 225px;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-}
-
-.button-55:hover {
-  box-shadow: rgba(0, 0, 0, .3) 2px 8px 8px -5px;
-  transform: translate3d(0, 2px, 0);
-}
-
-.button-55:focus {
-  box-shadow: rgba(0, 0, 0, .3) 2px 8px 4px -6px;
+    grid-template-columns: repeat(4, 1fr);
+    padding: .8rem;
+    gap: 1rem;
 }
 
 .count-down-time {
-    position: absolute;
-    left: 84.7vw;
-    box-shadow: rgba(3, 102, 214, 0.3) 0px 0px 0px 3px;
-    height: 6.7vh;
+    position: relative;
+    height: 80%;
     width: 15vw;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: .70em;
+    font-size: 2.4rem;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
 }
 
-.start-button:disabled {
-    display: none;
+.subtitle{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    height: 80%;
+    padding: 0 .5rem;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
 }
 
-img {
-    position: absolute;
-    left: 1vw;
-    height: 7vh;
+.score-icon{
+    text-align: center;
+    cursor: pointer;
 }
 
-.color-left {
-    background-color: black;
-    margin: 1vh 1vw;
-    border-radius: 2%;
+.score-icon::after{
+    content: "Score";
+    display: block;
+    font-size: 1.2rem;
 }
+
+.button-section{
+    height: 80%;
+}
+
+.play-button{
+    cursor: pointer;
+    transition: 1s;
+    height: 100%;
+    width: 6rem;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    background-color: inherit;
+    border: none;
+}
+
+.play-button:enabled:hover, .difficulty-section[data-disabled="false"]:hover{
+    transition: 1s;
+    background-color: rgb(160,219,240);
+}
+
+.play-button:disabled, .difficulty-section[data-disabled="true"]{
+    transition: 1s;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+};
