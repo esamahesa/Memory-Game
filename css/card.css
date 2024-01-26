@@ -1,7 +1,4 @@
-.memory-inners {
-    margin: 4%;
-    border-radius: 2% 0 0 0;
-    position: relative;
+.memory-inners{
     transition: transform 1s;
     transform-style: preserve-3d;
     background-color: rgb(208,237,247);
@@ -9,17 +6,10 @@
 }
 
 /* Set the element to the center of the inners */
-.memory-inners {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .memory-fronts, .memory-backs {
     width: 100%;
     height: 100%;
     position: absolute;
-    text-align: center;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 }
