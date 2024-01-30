@@ -1,3 +1,41 @@
+:root{
+    --title-background: rgba(18, 164, 217, 1);
+    --body-background: rgba(160, 219, 240, 1);
+    --container-background: rgba(113, 200, 232, 1);
+    --hover-background: rgba(160, 219, 240, 1);
+    --memory-inners-background: rgba(208, 237, 247, 1);
+    --notification-background: 
+    linear-gradient(
+        0deg, 
+        rgba(18, 164, 217, 0.1), 
+        rgba(18, 164, 217, 0.2), 
+        rgba(18, 164, 217, 0.3), 
+        rgba(18, 164, 217, 0.4), 
+        rgba(18, 164, 217, 0.5), 
+        rgba(18, 164, 217, 0.6), 
+        rgba(18, 164, 217, 0.7), 
+        rgba(18, 164, 217, 0.8), 
+        rgba(18, 164, 217, 0.9), 
+        rgba(18, 164, 217, 1)
+        );
+
+    /* box shadow */
+    --box-shadow1: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+    --box-shadow2: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    --box-shadow-card-match: rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px;
+    --box-shadow-for-card: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+    --box-shadow-notification: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+    --box-shadow-score-history: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    --box-shadow-high-score: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+    --box-shadow-difficulty-score: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+
+    /* option style section */
+    --option-odd-hover-background: rgba(255, 255, 255, 0.6);
+    --option-odd-background: rgba(255, 255, 255, 0.2);
+    --option-even-hover-background: rgba(0, 0, 0, 0.6);
+    --option-even-background: rgba(0, 0, 0, 0.2);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -10,7 +48,7 @@ html{
 
 body{
     font-family: 'Courier Prime', monospace;
-    background-color: rgb(160,219,240);
+    background-color: var(--body-background);
 }
 
 .title{
@@ -19,9 +57,9 @@ body{
     display: grid;
     grid-template-columns: 3fr auto 1fr auto;
     align-items: center;
-    gap: 10px;
+    gap: 1rem;
     padding: 0 1rem;
-    background-color: rgb(18,164,217);
+    background-color: var(--title-background);
 }
 
 .title h1{
@@ -34,7 +72,7 @@ body{
     width: 100%;
     height: calc(97vh - 6.4rem); 
     /* Ini di dapatkan dari pengurangan height yang di miliki oleh title dan di berikan vh yang di kurangi marginnya*/
-    background-color: rgb(113,200,232);
+    background-color: var(--container-background);
 }
 
 .container {
@@ -52,7 +90,7 @@ body{
     justify-content: center;
     align-items: center;
     font-size: 2.4rem;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+    box-shadow: var(--box-shadow1);
 }
 
 .subtitle{
@@ -62,7 +100,7 @@ body{
     gap: 1rem;
     height: 80%;
     padding: 0 .5rem;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+    box-shadow: var(--box-shadow1);
 }
 
 .score-icon{
@@ -85,17 +123,17 @@ body{
     transition: 1s;
     height: 100%;
     width: 6rem;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    box-shadow: var(--box-shadow2);
     background-color: inherit;
     border: none;
 }
 
 .play-button:enabled:hover, .difficulty-section[data-disabled="false"]:hover{
     transition: 1s;
-    background-color: rgb(160,219,240);
+    background-color: var(--hover-background);
 }
 
 .play-button:disabled, .difficulty-section[data-disabled="true"]{
     transition: 1s;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+    box-shadow: var(--box-shadow1);
 };
