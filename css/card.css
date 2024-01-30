@@ -1,8 +1,8 @@
 .memory-inners{
     transition: transform 1s;
     transform-style: preserve-3d;
-    background-color: rgb(208,237,247);
-    box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+    background-color: var(--memory-inners-background);
+    box-shadow: var(box-shadow-for-card);
 }
 
 /* Set the element to the center of the inners */
@@ -24,5 +24,5 @@
 }
 
 .match {
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px, rgb(51, 51, 51) 0px 0px 0px 3px;
+    box-shadow: var(--box-shadow-card-match);
 }
