@@ -7,7 +7,7 @@
   top: 50%;
   transform: translate(-50%,-50%);
   border-radius: 2px;
-  box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+  box-shadow: var(--box-shadow-notification);
 }
 
 .win-or-lose{
@@ -31,7 +31,7 @@
 }
 
 .reset-button:hover{
-  background-color: rgb(18,164,217);
+  background-color: var(--title-background);
   transition: 1s;
 }
 
@@ -53,14 +53,91 @@
   animation: fadeOut 3s;
 }
 
+
+/* lets define css style for score */
 .score-display{
-  display: flex;
+  box-shadow: var(--box-shadow2);
+  display: none;
   justify-content: center;
   align-items: center;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+}
+
+.score-icon-wrapper{
+  display: flex;
 }
 
 .score-display span{
   font-size: 2rem;
   font-weight: 600;
+}
+
+.score-and-high-score-wrapper{
+  position: absolute;
+  width: calc(50vw + 10rem);
+  max-width: 400px;
+  top: calc(6.4rem + 3vh + 3.8rem);
+  left: 1rem;
+  box-shadow: var(--box-shadow-score-history);
+  background: var(--notification-background);
+  display: none;
+}
+
+.score-history-container{
+  max-height: 150px;
+  font-size: 1.6rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  /* menghilangkan scroll bar pada beberapa browser */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.score-history-container:;-webkit-scrollbar{
+  display: none;
+}
+
+.high-score{
+  top: calc(6.4rem + 3vh);
+  left: 1rem;
+  box-shadow: var(--box-shadow-high-score);
+  text-align: center;
+  padding: 1rem 0;
+  font-size: 1.7rem;
+  position: fixed;
+  width: calc(50vw + 10rem);
+  max-width: 400px;
+  background: var(--notification-background);
+}
+
+.score-section{
+  padding: 1rem;
+}
+
+.bold{
+  font-weight: 600;
+}
+
+.difficulty-score{
+  box-shadow: var(--box-shadow-difficulty-score);
+  font-family: Times new roman;
+}
+
+ul{
+  padding: 0 0 0 2rem;
+}
+
+li{
+  margin-bottom: .8rem;
+}
+
+li:last-child{
+  margin-bottom: 0;
+}
+
+li::after{
+  content: "";
+  display: block;
+  width: 100%;
+  border-bottom: 1px solid black;
 }
