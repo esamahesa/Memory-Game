@@ -28,6 +28,19 @@ function printElement(amountOfElement){
 let isGamePlaying = false;
 let isGameOver = false;
 
+// define the 
+let scoreObject = {};
+let highScoreObject = {
+    "High Score": 0,
+    "Difficulty": null,
+    "Mode": null,
+    "Time Start": null,
+    "Time Pass": null,
+    "Time Left": null,
+    "Color": null,
+    "Is New High Score": null
+};
+
 // When user click start button, so all the card open, then after 3s the card close again
 const openingRotatingCard = (memoryInners)=>{
     memoryInners.forEach(memoryInner => {
@@ -111,7 +124,7 @@ const handle = (memoryInner, memoryBack, arrColectMemory, arrCollectColor, arrCo
 };
 
 // lets make a function that will count the time down
-const countDownTime = (arrMatchMemory, times, timeElement, memoryInners, arrayMatchColor)=>{
+const countDownTime = (arrMatchMemory, times, timeElement, memoryInners, arrayMatchColor, difficulty, setMode)=>{
     timeElement.innerHTML = `00:${times}`;
     let timeInterval = setInterval(()=>{
         if(arrMatchMemory.length === memoryInners.length && !isGameOver){
@@ -120,12 +133,48 @@ const countDownTime = (arrMatchMemory, times, timeElement, memoryInners, arrayMa
             winNotif();
 
             // tracking the color match
-            let scoreDisplayElement = document.querySelector('.score-display span');
-            scoreDisplayElement.innerHTML = "Score: " + scoreCounting(scoreObjectValue, trackingColorType(arrayMatchColor));
+            const scoreDisplayElement = document.querySelector('.score-display span');
+            const currentScore = scoreCounting(scoreObjectValue, trackingColorType(arrayMatchColor), times);
+
+            //get the time pass
+            const timePass = difficulty[1]["Display Time"] - times;
+            
+            // put the property within is length to the score object
+            scoreObject[Object.keys(scoreObject).length + 1] = {
+                "Point": currentScore,
+                "Difficulty": difficulty[0],
+                "Mode": setMode,
+                "Time Start": difficulty[1]["Display Time"],
+                "Time Pass": timePass,
+                "Time Left": times,
+                "Color": arrayMatchColor
+            };
+
+            let scoreJSON = JSON.stringify(scoreObject);
+            localStorage.setItem('scoreObject', scoreJSON);
+            
+            let checkingHighScore = checkHighScore(scoreObject, highScoreObject);
+
+            document.querySelector('.score-display').style.display = 'flex';
+            if(checkingHighScore["Is New High Score"]){
+                // if it is a new high score, so print the high score
+                scoreDisplayElement.innerHTML = "High Score: " + currentScore;
+                printTheHighScore(difficulty[0], checkingHighScore["High Score"]);
+
+                let highScoreJSON = JSON.stringify(highScoreObject);
+                localStorage.setItem('highScoreObject', highScoreJSON);
+            } else{
+                scoreDisplayElement.innerHTML = "Score: " + currentScore;
+            };
+
+            // print the score history
+            printTheScoreHistory(difficulty[0], scoreObject[Object.keys(scoreObject).length]["Point"], setMode);
         } else if(times <= 0 && !isGameOver){
             clearInterval(timeInterval);
             isGameOver = true;
             loseNotif();
+
+            document.querySelector('.score-display').style.display = 'none';
         } else{
             times--;
             timeElement.innerHTML = `00:${times}`;
@@ -137,7 +186,10 @@ const countDownTime = (arrMatchMemory, times, timeElement, memoryInners, arrayMa
 };
 
 // lets go applying the game logic
-const gameLogic = (arrCollectElement, arrCollectColor, arrCollectElementMatch, arrCollectColorMatch, times, timeElement, memoryInners, memoryBacks)=>{
+const gameLogic = (arrCollectElement, arrCollectColor, arrCollectElementMatch, 
+    arrCollectColorMatch, times, timeElement, 
+    memoryInners, memoryBacks, difficultyArray, 
+    setMode)=>{
     // Make an array that collect the handleCard function, so we can remove all the event!!
     let handleCards = [];
     memoryInners.forEach((memoryInner, index)=>{
@@ -155,7 +207,8 @@ const gameLogic = (arrCollectElement, arrCollectColor, arrCollectElementMatch, a
     });
 
     setTimeout(()=>{
-        countDownTime(arrCollectElementMatch, times, timeElement, memoryInners, arrCollectColorMatch);
+        countDownTime(arrCollectElementMatch, times, timeElement, 
+            memoryInners, arrCollectColorMatch, difficultyArray, setMode);
 
         // Make the interval so we can remove the event when the game over!
         let removeEventInterval = setInterval(()=>{
@@ -230,13 +283,14 @@ async function startGame(){
     let difficultySelectElement = document.querySelectorAll('.difficulty-option');
 
     // make the data-disabled true and the button disabled
+    document.querySelector('.score-icon-wrapper').dataset.disabled = "true";
     document.querySelector('.difficulty-section').dataset.disabled = "true";
     playButton.disabled = true;
 
     // Set difficulty
-    let difficultyArray = getDifficulty(difficultySelectElement)[1];
-    let difficulty = difficultyArray["Total Element"];
-    let times = difficultyArray["Display Time"];
+    let difficultyArray = getDifficulty(difficultySelectElement);
+    let difficulty = difficultyArray[1]["Total Element"];
+    let times = difficultyArray[1]["Display Time"];
 
     // Array Color
     let color = [];
@@ -261,19 +315,20 @@ async function startGame(){
         }
     };
 
+    const setMode = getMode(document.querySelectorAll('.mode-option'));
     // Open card then after 3s close card again
     openingRotatingCard(memoryInners);
     // Generating color for card
-    console.log(generateColor(color, memoryBacks, difficulty / 2, getMode(document.querySelectorAll('.mode-option')), colorObjectSettings));
+    generateColor(color, memoryBacks, difficulty / 2, setMode, colorObjectSettings);
     // Play the game logic
     gameLogic(cardInformation.Collect.Element, 
         cardInformation.Collect.Color, 
         cardInformation["Collect Match"].Element, 
         cardInformation["Collect Match"].Color, 
-        times, timeElement, memoryInners, memoryBacks);
+        times, timeElement, memoryInners, memoryBacks,
+        difficultyArray, setMode);
 
     isGamePlaying = true;
-    console.log(cardInformation);
 };
 
 // lets go add the event listener
