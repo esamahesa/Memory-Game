@@ -18,7 +18,13 @@
 </head>
 <body>
     <div class="title">
-        <div class="subtitle"><h1 title="Memory Game">Memory Game</h1><i class="bsc-archive score-icon pointer" title="Check Score"></i></div>
+        <div class="subtitle"><h1 title="Memory Game">Memory Game</h1>
+            <span class="score-icon-wrapper" data-disabled="false">
+                <i class="bsc-archive score-icon" title="Check Score"></i>
+            </span>
+            <div class="score-and-high-score-wrapper">
+            </div>
+        </div>
         <div class="count-down-time" title="Time">
             <span class="time">00:00</span>
         </div>
@@ -60,5 +66,6 @@
     <script src="./js/notification.js"></script>
     <script src="./js/color-generator.js"></script>
     <script src="./js/score.js"></script>
+    <script src="./js/local-storage.js"></script>
 </body>
 </html>
