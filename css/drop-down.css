@@ -3,7 +3,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    box-shadow: var(--box-shadow2);
 }
 
 #difficulty{
@@ -28,7 +28,7 @@
     position: absolute;
     border: 1px solid black;
     top: calc(6.4rem + 3vh);
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+    box-shadow: var(--box-shadow1);
 }
 
 .difficulty-wrapper, .mode-wrapper{
@@ -42,22 +42,22 @@
 }
 
 .difficulty-option:nth-child(even), .mode-option:nth-child(even){
-    background-color: rgba(0, 0, 0, .2);
+    background-color: var(--option-even-background);
     color: white;
 }
 
 .difficulty-option:nth-child(even):hover, .mode-option:nth-child(even):hover{
-    background-color: rgba(0, 0, 0, .6);
+    background-color: var(--option-even-hover-background);
     color: white;
 }
 
 .difficulty-option:nth-child(odd), .mode-option:nth-child(odd){
-    background-color: rgba(255, 255, 255, .2);
+    background-color: var(--option-odd-background);
     color: black;
 }
 
 .difficulty-option:nth-child(odd):hover, .mode-option:nth-child(odd):hover{
-    background-color: rgba(255, 255, 255, .6);
+    background-color: var(--option-odd-hover-background);
 }
 
 .difficulty-option:nth-child(odd){
