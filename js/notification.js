@@ -37,6 +37,7 @@ async function reset(){
 
         playButton.disabled = false;
         document.querySelector('.difficulty-section').dataset.disabled = "false";
+        document.querySelector('.score-icon-wrapper').dataset.disabled = "false";
         
         notification.style.display = "none";
         timeElement.innerHTML = `00:00`;
@@ -118,7 +119,6 @@ const removeMemoryInners = (memoryInners)=>{
             // set the value to true
             conditionObject[element.dataset.value] = true;
             element.style.backgroundColor = changeTheOpacityColor(element, 0.9);
-
             // set atribut data
             element.setAttribute('data-choosen', 'true');
         } else{
